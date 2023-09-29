@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:newstech/model/news.dart';
+import 'package:newstech/presenter/presenter.dart';
 import 'package:newstech/view/reading.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,6 +12,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Presenter? presenter;
+
+  @override
+  void initState() {
+    presenter = Presenter();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,26 +50,41 @@ class _HomePageState extends State<HomePage> {
       ),
       backgroundColor: Color(0xffEDEDE9),
       body: Column(
-        children: [newsTech()],
+        children: [
+          FutureBuilder(
+            future: presenter?.getNewsApi(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Expanded(
+                    child: Center(child: CircularProgressIndicator()));
+              } else if (snapshot.hasData) {
+                return newsTech(snapshot.data!);
+              } else {
+                return Expanded(child: Center(child: Text('Erro')));
+              }
+            },
+          )
+        ],
       ),
     );
   }
 
-  Widget newsTech() {
+  Widget newsTech(List<NewsModel> dataNews) {
     return Expanded(
       child: ListView.builder(
         shrinkWrap: true,
-        itemCount: 5,
+        itemCount: dataNews.length,
         itemBuilder: (context, index) {
           return Column(
             children: [
               InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, ReadingNews.readingRoute);
+                  Navigator.pushNamed(context, ReadingNews.readingRoute,
+                      arguments: dataNews[index]);
                 },
                 child: Container(
                   margin: EdgeInsets.only(left: 10, right: 10),
-                  height: 350,
+                  height: 360,
                   width: 350,
                   decoration: BoxDecoration(
                       borderRadius:
@@ -70,19 +95,25 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(10),
-                        child: Image.asset(
-                          "assets/images/exampleimage.jpg",
+                        child: Image.network(
+                          "${dataNews[index].image_url}",
                           width: 330,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam accumsan eget augue non sollicitudin. Morbi tempus, nisi eget tincidunt efficitur,  imperdiet ",
-                          textAlign: TextAlign.left,
-                          maxLines: 3,
-                          style: TextStyle(
-                              fontSize: 18, fontFamily: 'TitleNewsRoslab'),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: Text(
+                              "${dataNews[index].description}",
+                              textAlign: TextAlign.left,
+                              maxLines: 5,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 18, fontFamily: 'TitleNewsRoslab'),
+                            ),
+                          ),
                         ),
                       )
                     ],

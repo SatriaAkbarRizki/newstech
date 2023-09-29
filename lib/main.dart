@@ -17,7 +17,9 @@ class MainApp extends StatelessWidget {
       home: HomePage(),
       routes: {
         HomePage.homeRoute: (context) => HomePage(),
-        ReadingNews.readingRoute: (context) => ReadingNews()
+        ReadingNews.readingRoute: (context) => ReadingNews(
+              listNews: [],
+            )
       },
     );
   }

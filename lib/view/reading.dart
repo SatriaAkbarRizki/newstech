@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:newstech/model/news.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ReadingNews extends StatelessWidget {
   static const readingRoute = '/ReadingRoute';
-  const ReadingNews({super.key});
+  final List<NewsModel> listNews;
+  const ReadingNews({required this.listNews, super.key});
   final title =
       "Spotify Luncurkan Fitur Terjemahan Bertenaga AI, Gunakan Suara Podcaster Top";
   final description =
       "Spotify telah meluncurkan sistem AI yang menerjemahkan podcast populer ke berbagai bahasa dengan tetap mempertahankan suara pembawa acara atau podcaster top. Fitur terjemahan dapat mentranskripsikan bahasa....";
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as NewsModel;
+
     final sizeDevice = MediaQuery.of(context).size;
     return Scaffold(
       body: Stack(
@@ -20,8 +26,8 @@ class ReadingNews extends StatelessWidget {
                   Container(
                     width: sizeDevice.width,
                     height: 350,
-                    child: Image.asset(
-                      'assets/images/exampleimage.jpg',
+                    child: Image.network(
+                      '${args.image_url}',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -47,7 +53,7 @@ class ReadingNews extends StatelessWidget {
                       child: SizedBox(
                         width: sizeDevice.width,
                         child: Text(
-                          '${title}',
+                          '${args.title}',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             color: Colors.white,
@@ -77,7 +83,7 @@ class ReadingNews extends StatelessWidget {
                   Container(
                       padding: EdgeInsets.all(20),
                       child: Text(
-                        '${description}',
+                        '${args.description}',
                         style: TextStyle(
                             fontFamily: 'SourceSans', fontSize: 19, height: 2),
                       ))
@@ -85,9 +91,14 @@ class ReadingNews extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(top: 30, child: ActionBar()),
+          Positioned(top: 30, child: ActionBar(url: args.link)),
           Positioned(top: 690, child: ShadowMessage()),
-          Positioned(top: 650, left: 200, child: ButtonSourceNews())
+          Positioned(
+              top: 650,
+              left: 200,
+              child: ButtonSourceNews(
+                url: args.link.toString(),
+              ))
         ],
       ),
     );
@@ -95,6 +106,9 @@ class ReadingNews extends StatelessWidget {
 }
 
 class ActionBar extends StatelessWidget {
+  final String url;
+  ActionBar({required this.url});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -115,7 +129,10 @@ class ActionBar extends StatelessWidget {
             width: 250,
           ),
           ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                print('Link Share:${url.toString()}');
+                shareNews(url);
+              },
               style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xD8D9CF), shape: CircleBorder()),
               child: Center(
@@ -126,6 +143,10 @@ class ActionBar extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future shareNews(String urlNews) async {
+    await Share.share(urlNews);
   }
 }
 
@@ -155,6 +176,9 @@ class ShadowMessage extends StatelessWidget {
 }
 
 class ButtonSourceNews extends StatelessWidget {
+  final String url;
+
+  ButtonSourceNews({required this.url});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -162,7 +186,9 @@ class ButtonSourceNews extends StatelessWidget {
       child: SizedBox(
         height: 50,
         child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () async {
+              await _launchUrl(url);
+            },
             style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
                 foregroundColor: Colors.blue,
@@ -175,5 +201,14 @@ class ButtonSourceNews extends StatelessWidget {
             )),
       ),
     );
+  }
+
+  Future _launchUrl(String url) async {
+    final Uri _url = Uri.parse(url);
+    if (await canLaunchUrl(_url)) {
+      await launchUrl(_url, mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch ${_url}';
+    }
   }
 }
