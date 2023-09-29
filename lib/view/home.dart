@@ -144,6 +144,54 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  Widget HaveEror() {
+    return Expanded(
+        child: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: Image.asset(
+              "assets/images/eror.png",
+              scale: 1.2,
+            ),
+          ),
+          SizedBox(
+            width: 250,
+            child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  'hmm.. looks like there is a problem, try refreshing  ',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Roboto'),
+                )),
+          ),
+          SizedBox(
+            height: 50,
+            child: ElevatedButton(
+                onPressed: () async {
+                  Future.delayed(Duration(seconds: 1)).whenComplete(() {
+                    setState(() {});
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.blue,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+                child: Text(
+                  'Refresh Page',
+                  style: TextStyle(color: Colors.white),
+                )),
+          )
+        ],
+      ),
+    ));
+  }
 }
 
 class LoadingData extends StatelessWidget {
@@ -213,37 +261,5 @@ class LoadingData extends StatelessWidget {
         },
       ),
     );
-  }
-}
-
-class HaveEror extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Image.asset(
-              "assets/images/eror.png",
-              scale: 1.2,
-            ),
-          ),
-          SizedBox(
-            width: 250,
-            child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Text(
-                  'hmm.. looks like there is a problem, try refreshing  ',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Roboto'),
-                )),
-          )
-        ],
-      ),
-    ));
   }
 }
