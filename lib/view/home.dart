@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:newstech/model/news.dart';
 import 'package:newstech/presenter/presenter.dart';
 import 'package:newstech/view/reading.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
   static const homeRoute = '/Home';
@@ -20,7 +21,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -49,22 +49,37 @@ class _HomePageState extends State<HomePage> {
         forceMaterialTransparency: true,
       ),
       backgroundColor: Color(0xffEDEDE9),
-      body: Column(
-        children: [
-          FutureBuilder(
-            future: presenter?.getNewsApi(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Expanded(
-                    child: Center(child: CircularProgressIndicator()));
-              } else if (snapshot.hasData) {
-                return newsTech(snapshot.data!);
-              } else {
-                return Expanded(child: Center(child: Text('Erro')));
-              }
-            },
-          )
-        ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          Future.delayed(Duration(seconds: 1), () {
+            setState(() {});
+          });
+        },
+        color: Colors.white,
+        backgroundColor: Colors.black,
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                FutureBuilder(
+                  future: presenter?.getNewsApi(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      // Show a loading indicator.
+                      return LoadingData();
+                    } else if (snapshot.hasData) {
+                      // Show the news list.
+                      return newsTech(snapshot.data!);
+                    } else {
+                      // Show an empty state if an error occurred.
+                      return HaveEror();
+                    }
+                  },
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -128,5 +143,107 @@ class _HomePageState extends State<HomePage> {
         },
       ),
     );
+  }
+}
+
+class LoadingData extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: 3,
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(left: 10, right: 10),
+                height: 360,
+                width: 350,
+                decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(18)),
+                    border: Border.all(style: BorderStyle.solid)),
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey.shade500,
+                  highlightColor: Colors.grey.shade400,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Container(
+                            height: 280,
+                            width: 350,
+                            decoration: BoxDecoration(color: Colors.grey),
+                          )),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: Container(
+                              height: 10,
+                              decoration: BoxDecoration(color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: SizedBox(
+                            width: 250,
+                            child: Container(
+                              height: 10,
+                              decoration: BoxDecoration(color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              )
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class HaveEror extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: Image.asset(
+              "assets/images/eror.png",
+              scale: 1.2,
+            ),
+          ),
+          SizedBox(
+            width: 250,
+            child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  'hmm.. looks like there is a problem, try refreshing  ',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Roboto'),
+                )),
+          )
+        ],
+      ),
+    ));
   }
 }
