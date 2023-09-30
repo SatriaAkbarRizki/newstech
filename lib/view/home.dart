@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                       // Show the news list.
                       return newsTech(snapshot.data!);
                     } else {
-                      // Show an empty state if an error occurred.
+                      print('Error Message: ${snapshot.error}');
                       return HaveEror();
                     }
                   },
