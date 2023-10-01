@@ -55,14 +55,17 @@ class ReadingNews extends StatelessWidget {
                         top: 245,
                         child: SizedBox(
                           width: sizeDevice.width,
-                          child: Text(
-                            '${args.title}',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'TitleNewsRoslab',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 18,
+                          child: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Text(
+                              '${args.title}',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'TitleNewsRoslab',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 18,
+                              ),
                             ),
                           ),
                         )),
@@ -100,11 +103,13 @@ class ReadingNews extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(top: 30, child: ActionBar(url: args.link)),
+          Positioned(
+              top: 30,
+              child: ActionBar(sizeDevice: sizeDevice, url: args.link)),
           Positioned(top: 690, child: ShadowMessage()),
           Positioned(
               top: 650,
-              left: 200,
+              left: sizeDevice.width / 2,
               child: ButtonSourceNews(
                 url: args.link.toString(),
               ))
@@ -116,7 +121,8 @@ class ReadingNews extends StatelessWidget {
 
 class ActionBar extends StatelessWidget {
   final String url;
-  ActionBar({required this.url});
+  final Size sizeDevice;
+  ActionBar({required this.sizeDevice, required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +141,7 @@ class ActionBar extends StatelessWidget {
                 size: 18,
               ))),
           SizedBox(
-            width: 250,
+            width: sizeDevice.width / 1.6,
           ),
           ElevatedButton(
               onPressed: () {

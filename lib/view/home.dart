@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:newstech/model/news.dart';
 import 'package:newstech/presenter/presenter.dart';
 import 'package:newstech/view/reading.dart';
@@ -22,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget build(BuildContext context) {
+    Size sizeDevice = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -66,10 +68,12 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       // Show a loading indicator.
-                      return LoadingData();
+                      return LoadingData(
+                        sizeDevice: sizeDevice,
+                      );
                     } else if (snapshot.hasData) {
                       // Show the news list.
-                      return newsTech(snapshot.data!);
+                      return newsTech(sizeDevice, snapshot.data!);
                     } else {
                       print('Error Message: ${snapshot.error}');
                       return HaveEror();
@@ -84,7 +88,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget newsTech(List<NewsModel> dataNews) {
+  Widget newsTech(Size sizeDevice, List<NewsModel> dataNews) {
     return Expanded(
       child: ListView.builder(
         shrinkWrap: true,
@@ -99,8 +103,8 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: Container(
                   margin: EdgeInsets.only(left: 10, right: 10),
-                  height: 360,
-                  width: 350,
+                  height: sizeDevice.height / 2,
+                  width: sizeDevice.width,
                   decoration: BoxDecoration(
                       borderRadius:
                           BorderRadius.only(bottomLeft: Radius.circular(18)),
@@ -112,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.all(10),
                         child: Image.network(
                           "${dataNews[index].image_url}",
-                          width: 330,
+                          width: sizeDevice.width,
                         ),
                       ),
                       Expanded(
@@ -124,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                               "${dataNews[index].description}",
                               textAlign: TextAlign.left,
                               maxLines: 5,
-                              overflow: TextOverflow.ellipsis,
+                              overflow: TextOverflow.fade,
                               style: TextStyle(
                                   fontSize: 18, fontFamily: 'TitleNewsRoslab'),
                             ),
@@ -151,42 +155,56 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
-            child: Image.asset(
-              "assets/images/eror.png",
-              scale: 1.2,
+          Animate(
+            effects: [FadeEffect(duration: 800.ms, delay: 250.ms)],
+            child: Center(
+              child: Image.asset(
+                "assets/images/eror.png",
+                scale: 1.2,
+              ),
             ),
           ),
-          SizedBox(
-            width: 250,
-            child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Text(
-                  'hmm.. looks like there is a problem, try refreshing  ',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Roboto'),
-                )),
+          Animate(
+            effects: [
+              FadeEffect(duration: 1000.ms, delay: 300.ms),
+            ],
+            child: SizedBox(
+              width: 250,
+              child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    'hmm.. looks like there is a problem, try refreshing  ',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Roboto'),
+                  )),
+            ),
           ),
-          SizedBox(
-            height: 50,
-            child: ElevatedButton(
-                onPressed: () async {
-                  Future.delayed(Duration(seconds: 1)).whenComplete(() {
-                    setState(() {});
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.blue,
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10))),
-                child: Text(
-                  'Refresh Page',
-                  style: TextStyle(color: Colors.white),
-                )),
+          Animate(
+            effects: [FadeEffect(duration: 1000.ms, delay: 300.ms)],
+            child: SizedBox(
+              height: 50,
+              child: Animate(
+                effects: [ShimmerEffect(duration: 1000.ms, delay: 800.ms)],
+                child: ElevatedButton(
+                    onPressed: () async {
+                      Future.delayed(Duration(seconds: 1)).whenComplete(() {
+                        setState(() {});
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.blue,
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                    child: Text(
+                      'Refresh Page',
+                      style: TextStyle(color: Colors.white),
+                    )),
+              ),
+            ),
           )
         ],
       ),
@@ -195,6 +213,10 @@ class _HomePageState extends State<HomePage> {
 }
 
 class LoadingData extends StatelessWidget {
+  final Size sizeDevice;
+
+  const LoadingData({required this.sizeDevice, super.key});
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -207,7 +229,7 @@ class LoadingData extends StatelessWidget {
               Container(
                 margin: EdgeInsets.only(left: 10, right: 10),
                 height: 360,
-                width: 350,
+                width: sizeDevice.width,
                 decoration: BoxDecoration(
                     borderRadius:
                         BorderRadius.only(bottomLeft: Radius.circular(18)),
@@ -222,7 +244,7 @@ class LoadingData extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           child: Container(
                             height: 280,
-                            width: 350,
+                            width: sizeDevice.width,
                             decoration: BoxDecoration(color: Colors.grey),
                           )),
                       Expanded(
