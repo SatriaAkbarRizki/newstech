@@ -198,22 +198,28 @@ class ButtonSourceNews extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20),
-      child: SizedBox(
-        height: 50,
-        child: ElevatedButton(
-            onPressed: () async {
-              await _launchUrl(url);
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                foregroundColor: Colors.blue,
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10))),
-            child: Text(
-              'Baca Selengkapnya',
-              style: TextStyle(color: Colors.white),
-            )),
+      child: Animate(
+        effects: [FadeEffect(duration: 1000.ms, delay: 350.ms)],
+        child: SizedBox(
+          height: 50,
+          child: Animate(
+            effects: [ShimmerEffect(duration: 1000.ms, delay: 800.ms)],
+            child: ElevatedButton(
+                onPressed: () async {
+                  await _launchUrl(url);
+                },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.blue,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+                child: Text(
+                  'Baca Selengkapnya',
+                  style: TextStyle(color: Colors.white),
+                )),
+          ),
+        ),
       ),
     );
   }

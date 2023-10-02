@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:newstech/view/home.dart';
 import 'package:newstech/view/reading.dart';
+import 'package:newstech/view/splashscreen.dart';
 
 void main() {
   runApp( MainApp());
@@ -13,7 +14,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(scaffoldBackgroundColor: Color(0xffFEFDFF)),
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: SplashScreen(),
       routes: {
         HomePage.homeRoute: (context) => HomePage(),
         ReadingNews.readingRoute: (context) => ReadingNews(
