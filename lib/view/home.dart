@@ -43,30 +43,37 @@ class HomePage extends StatelessWidget {
         forceMaterialTransparency: true,
       ),
       backgroundColor: Color(0xffEDEDE9),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              FutureBuilder(
-                future: Presenter().getNewsApi(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    // Show a loading indicator.
-                    return LoadingData(
-                      sizeDevice: sizeDevice,
-                    );
-                  } else if (snapshot.hasData) {
-                    // Show the news list.
-                    return newsTech(sizeDevice, snapshot.data!);
-                  } else {
-                    print('Error Message: ${snapshot.error}');
-                    return newsTech(sizeDevice, dataOldApi.valueOld());
-                  }
-                },
-              )
-            ],
-          ),
-        ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await Presenter().getNewsApi().whenComplete(() {
+            Navigator.pushReplacementNamed(context, HomePage.homeRoute);
+          });
+        },
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                FutureBuilder(
+                  future: Presenter().getNewsApi(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      // Show a loading indicator.
+                      return LoadingData(
+                        sizeDevice: sizeDevice,
+                      );
+                    } else if (snapshot.hasData) {
+                      // Show the news list.
+                      return newsTech(sizeDevice, snapshot.data!);
+                    } else {
+                      print('Error Message: ${snapshot.error}');
+                      return newsTech(sizeDevice, dataOldApi.valueOld());
+                    }
+                  },
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
