@@ -1,28 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:newstech/data/dataold.dart';
 import 'package:newstech/model/news.dart';
 import 'package:newstech/presenter/presenter.dart';
 import 'package:newstech/view/reading.dart';
 import 'package:shimmer/shimmer.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   static const homeRoute = '/Home';
-  const HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
+  // Pakai data statis kalau dari api kenak limit maupun eror
+  DataOldApi dataOldApi = DataOldApi();
 
-class _HomePageState extends State<HomePage> {
-  Presenter? presenter;
-
-  @override
-  void initState() {
-    presenter = Presenter();
-    super.initState();
-  }
-
+  HomePage({super.key});
   Widget build(BuildContext context) {
+    print('Data old: ${dataOldApi.valueOld()}');
     Size sizeDevice = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -51,39 +43,30 @@ class _HomePageState extends State<HomePage> {
         forceMaterialTransparency: true,
       ),
       backgroundColor: Color(0xffEDEDE9),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          Future.delayed(Duration(seconds: 1), () {
-            setState(() {});
-          });
-        },
-        color: Colors.white,
-        backgroundColor: Colors.black,
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                FutureBuilder(
-                  future: presenter?.getNewsApi(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      // Show a loading indicator.
-                      return LoadingData(
-                        sizeDevice: sizeDevice,
-                      );
-                    } else if (snapshot.hasData) {
-                      // Show the news list.
-                      return newsTech(sizeDevice, snapshot.data!);
-                    } else {
-                      print('Error Message: ${snapshot.error}');
-                      return HaveEror();
-                    }
-                  },
-                )
-              ],
-            ),
-          ],
-        ),
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              FutureBuilder(
+                future: Presenter().getNewsApi(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Show a loading indicator.
+                    return LoadingData(
+                      sizeDevice: sizeDevice,
+                    );
+                  } else if (snapshot.hasData) {
+                    // Show the news list.
+                    return newsTech(sizeDevice, snapshot.data!);
+                  } else {
+                    print('Error Message: ${snapshot.error}');
+                    return newsTech(sizeDevice, dataOldApi.valueOld());
+                  }
+                },
+              )
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -149,7 +132,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget HaveEror() {
+  Widget HaveEror(BuildContext context) {
     return Expanded(
         child: Center(
       child: Column(
@@ -189,8 +172,9 @@ class _HomePageState extends State<HomePage> {
                 effects: [ShimmerEffect(duration: 1000.ms, delay: 800.ms)],
                 child: ElevatedButton(
                     onPressed: () async {
-                      Future.delayed(Duration(seconds: 1)).whenComplete(() {
-                        setState(() {});
+                      Presenter().getNewsApi().whenComplete(() {
+                        Navigator.pushReplacementNamed(
+                            context, HomePage.homeRoute);
                       });
                     },
                     style: ElevatedButton.styleFrom(
