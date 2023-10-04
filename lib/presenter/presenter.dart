@@ -1,9 +1,6 @@
 import 'dart:convert';
-
-import 'package:newstech/data/dataold.dart';
 import 'package:newstech/model/news.dart';
 import 'package:http/http.dart' as http;
-
 
 class Presenter {
   List<NewsModel>? listNews;
@@ -24,4 +21,3 @@ class Presenter {
     }
   }
 }
-

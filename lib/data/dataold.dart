@@ -2,7 +2,7 @@ import 'package:newstech/model/news.dart';
 
 class DataOldApi {
   List<NewsModel> valueOld() {
-    List<NewsModel> old = List.generate(2, (index) {
+    List<NewsModel> old = List.generate(4, (index) {
       return NewsModel(
         title: "",
         description: "",
@@ -31,6 +31,25 @@ class DataOldApi {
       link:
           "https://www.liputan6.com/tekno/read/5412752/hari-batik-nasional-2023-pencarian-di-google-soal-sejarah-hari-batik-naik-250-persen",
     );
+
+    old[2] = NewsModel(
+        title:
+            "Layar iPhone Ternyata Punya Barcode Buat Cegah Kecurangan dari Manufaktur",
+        description:
+            "Apple ternyata menyematkan barcode berukuran kecil untuk mencegah terjadinya kecurangan oleh manufaktur saat memproduksi layar iPhone.",
+        image_url:
+            "https://cdn0-production-images-kly.akamaized.net/aPwDTHjiZSiJ6g1YKI4RklFt-Fg=/673x379/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/4037398/original/090314400_1653891333-shutterstock_1552043147.jpg",
+        link:
+            "https://www.liputan6.com/tekno/read/5412506/layar-iphone-ternyata-punya-barcode-buat-cegah-kecurangan-dari-manufaktur");
+    old[3] = NewsModel(
+        title:
+            "Oppo Find N3 Flip Bakal Rilis di Indonesia, Sudah Mejeng di Situs Resmi",
+        description:
+            "Situs resmi Oppo Indonesia sudah menunjukkan tanda-tanda yang kuat tentang kehadiran Oppo Find N3 Flip di Tanah Air.",
+        image_url:
+            "https://cdn0-production-images-kly.akamaized.net/KK6do8lkoA34XBqzj7naNpJg-dU=/87x0:1179x615/673x379/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/4596187/original/095202300_1696298007-page_find_n3_flip.jpg",
+        link:
+            "https://www.liputan6.com/tekno/read/5412987/oppo-find-n3-flip-bakal-rilis-di-indonesia-sudah-mejeng-di-situs-resmi");
 
     return old;
   }
