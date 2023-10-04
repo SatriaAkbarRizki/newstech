@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:newstech/data/dataold.dart';
 import 'package:newstech/model/news.dart';
 import 'package:newstech/presenter/presenter.dart';
+import 'package:newstech/view/landscape/home_landscp.dart';
 import 'package:newstech/view/reading.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -14,7 +15,6 @@ class HomePage extends StatelessWidget {
 
   HomePage({super.key});
   Widget build(BuildContext context) {
-    print('Data old: ${dataOldApi.valueOld()}');
     Size sizeDevice = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -49,30 +49,56 @@ class HomePage extends StatelessWidget {
             Navigator.pushReplacementNamed(context, HomePage.homeRoute);
           });
         },
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                FutureBuilder(
-                  future: Presenter().getNewsApi(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      // Show a loading indicator.
-                      return LoadingData(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth >= 400) {
+              return FutureBuilder(
+                future: Presenter().getNewsApi(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Show a loading indicator.
+                    return LoadingDataLandscape(
+                      sizeDevice: sizeDevice,
+                    );
+                  } else if (snapshot.hasData) {
+                    // Show the news list.
+                    return NewsTechLandscape(
+                      sizeDevice: sizeDevice,
+                      dataNews: snapshot.data!,
+                    );
+                    // return NewsTechLandscape(
+                    //     sizeDevice: sizeDevice, dataNews: snapshot.data!);
+                  } else {
+                    return NewsTechLandscape(
                         sizeDevice: sizeDevice,
-                      );
-                    } else if (snapshot.hasData) {
-                      // Show the news list.
-                      return newsTech(sizeDevice, snapshot.data!);
-                    } else {
-                      print('Error Message: ${snapshot.error}');
-                      return newsTech(sizeDevice, dataOldApi.valueOld());
-                    }
-                  },
-                )
-              ],
-            ),
-          ],
+                        dataNews: dataOldApi.valueOld());
+                  }
+                },
+              );
+            } else {
+              return FutureBuilder(
+                future: Presenter().getNewsApi(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Show a loading indicator.
+                    return LoadingData(
+                      sizeDevice: sizeDevice,
+                    );
+                  } else if (snapshot.hasData) {
+                    // Show the news list.
+                    return newsTech(
+                      sizeDevice,
+                      snapshot.data!,
+                    );
+                    // return NewsTechLandscape(
+                    //     sizeDevice: sizeDevice, dataNews: snapshot.data!);
+                  } else {
+                    return newsTech(sizeDevice, dataOldApi.valueOld());
+                  }
+                },
+              );
+            }
+          },
         ),
       ),
     );
