@@ -10,9 +10,10 @@ class NewsTechLandscape extends StatelessWidget {
   const NewsTechLandscape({required this.sizeDevice, required this.dataNews});
   @override
   Widget build(BuildContext context) {
+    print('Size Device:: ${sizeDevice.width}');
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        childAspectRatio: 1.3,
+        childAspectRatio: 1.4,
         crossAxisCount: 2,
       ),
       itemCount: dataNews.length,
@@ -44,7 +45,7 @@ class NewsTechLandscape extends StatelessWidget {
                         Padding(
                             padding: const EdgeInsets.all(10),
                             child: Container(
-                              height: 150,
+                              height: sizeDevice.width >= 460 ? 150 : 100,
                               width: sizeDevice.width,
                               decoration: BoxDecoration(color: Colors.grey),
                               child: Image.network(
@@ -66,7 +67,8 @@ class NewsTechLandscape extends StatelessWidget {
                                   maxLines: 3,
                                   overflow: TextOverflow.fade,
                                   style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize:
+                                          sizeDevice.width >= 460 ? 16 : 18,
                                       fontFamily: 'TitleNewsRoslab'),
                                 ),
                               ),
@@ -95,73 +97,71 @@ class LoadingDataLandscape extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 1.3,
-          crossAxisCount: 2,
-        ),
-        itemCount: 4,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Container(
-                  margin: EdgeInsets.only(left: 10, right: 10),
-                  height: 250,
-                  width: sizeDevice.width,
-                  decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.only(bottomLeft: Radius.circular(18)),
-                      border: Border.all(style: BorderStyle.solid)),
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.grey.shade500,
-                    highlightColor: Colors.grey.shade400,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                            padding: const EdgeInsets.all(10),
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        childAspectRatio: sizeDevice.width >= 600 ? 1.2 : 1.6,
+        crossAxisCount: 2,
+      ),
+      itemCount: 4,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Container(
+                margin: EdgeInsets.only(left: 10, right: 10),
+                height: 250,
+                width: sizeDevice.width,
+                decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(18)),
+                    border: Border.all(style: BorderStyle.solid)),
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey.shade500,
+                  highlightColor: Colors.grey.shade400,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Container(
+                            height: sizeDevice.width >= 460 ? 100 : 150,
+                            width: sizeDevice.width,
+                            decoration: BoxDecoration(color: Colors.grey),
+                          )),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
                             child: Container(
-                              height: 150,
-                              width: sizeDevice.width,
+                              height: 10,
                               decoration: BoxDecoration(color: Colors.grey),
-                            )),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Container(
-                                height: 10,
-                                decoration: BoxDecoration(color: Colors.grey),
-                              ),
                             ),
                           ),
                         ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: SizedBox(
-                              width: 250,
-                              child: Container(
-                                height: 10,
-                                decoration: BoxDecoration(color: Colors.grey),
-                              ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: SizedBox(
+                            width: 250,
+                            child: Container(
+                              height: 10,
+                              decoration: BoxDecoration(color: Colors.grey),
                             ),
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
-            ],
-          );
-        },
-      ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

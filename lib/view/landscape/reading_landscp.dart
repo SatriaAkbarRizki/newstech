@@ -17,7 +17,7 @@ class ReadingNewsLandScape extends StatelessWidget {
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
-          if (constraints.maxWidth <= 400) {
+          if (constraints.maxWidth <= 480) {
             return ReadingPotrait(sizeDevice: sizeDevice, args: args);
           } else {
             return ReadingLandScape(sizeDevice: sizeDevice, args: args);
@@ -99,7 +99,7 @@ class ReadingLandScape extends StatelessWidget {
             Stack(
               children: [
                 Container(
-                  height: 300,
+                  height: sizeDevice.height,
                   width: sizeDevice.width,
                   decoration: BoxDecoration(
                       color: Color(0xffFEFDFF),
@@ -123,7 +123,10 @@ class ReadingLandScape extends StatelessWidget {
                       ),
                       Container(
                           margin: EdgeInsets.only(
-                              left: sizeDevice.width / 1.35, top: 30),
+                              left: sizeDevice.width >= 460
+                                  ? sizeDevice.width / 1.70
+                                  : sizeDevice.width / 1.35,
+                              top: 30),
                           child: ButtonSourceNews(
                             url: args.link.toString(),
                           )),
@@ -164,7 +167,9 @@ class ActionBar extends StatelessWidget {
                 size: 18,
               ))),
           SizedBox(
-            width: sizeDevice.width / 1.25,
+            width: sizeDevice.width >= 460
+                ? sizeDevice.width / 1.50
+                : sizeDevice.width / 1.25,
           ),
           ElevatedButton(
               onPressed: () {

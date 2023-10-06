@@ -51,7 +51,7 @@ class HomePage extends StatelessWidget {
         },
         child: LayoutBuilder(
           builder: (context, constraints) {
-            if (constraints.maxWidth >= 400) {
+            if (constraints.maxWidth >= 600) {
               return FutureBuilder(
                 future: Presenter().getNewsApi(),
                 builder: (context, snapshot) {
@@ -61,13 +61,11 @@ class HomePage extends StatelessWidget {
                       sizeDevice: sizeDevice,
                     );
                   } else if (snapshot.hasData) {
-                    // Show the news list.
                     return NewsTechLandscape(
                       sizeDevice: sizeDevice,
                       dataNews: snapshot.data!,
                     );
-                    // return NewsTechLandscape(
-                    //     sizeDevice: sizeDevice, dataNews: snapshot.data!);
+
                   } else {
                     return NewsTechLandscape(
                         sizeDevice: sizeDevice,
