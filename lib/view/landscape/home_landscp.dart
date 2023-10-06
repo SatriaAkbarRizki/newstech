@@ -10,18 +10,19 @@ class NewsTechLandscape extends StatelessWidget {
   const NewsTechLandscape({required this.sizeDevice, required this.dataNews});
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 1.3,
-          crossAxisCount: 2,
-        ),
-        itemCount: dataNews.length,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              InkWell(
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        childAspectRatio: 1.3,
+        crossAxisCount: 2,
+      ),
+      itemCount: dataNews.length,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return Flex(
+          direction: Axis.vertical,
+          children: [
+            Flexible(
+              child: InkWell(
                 onTap: () {
                   Navigator.pushNamed(
                       context, ReadingNewsLandScape.readingRouteLandScape,
@@ -62,7 +63,7 @@ class NewsTechLandscape extends StatelessWidget {
                                 child: Text(
                                   "${dataNews[index].description}",
                                   textAlign: TextAlign.left,
-                                  maxLines: 5,
+                                  maxLines: 3,
                                   overflow: TextOverflow.fade,
                                   style: TextStyle(
                                       fontSize: 18,
@@ -77,11 +78,13 @@ class NewsTechLandscape extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
-          );
-        },
-      ),
+            ),
+          ],
+        );
+      },
     );
+    ;
+    ;
   }
 }
 

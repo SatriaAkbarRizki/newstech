@@ -105,63 +105,61 @@ class HomePage extends StatelessWidget {
   }
 
   Widget newsTech(Size sizeDevice, List<NewsModel> dataNews) {
-    return Expanded(
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: dataNews.length,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, ReadingNews.readingRoute,
-                      arguments: dataNews[index]);
-                },
-                child: Container(
-                  margin: EdgeInsets.only(left: 10, right: 10),
-                  height: sizeDevice.height / 2,
-                  width: sizeDevice.width,
-                  decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.only(bottomLeft: Radius.circular(18)),
-                      border: Border.all(style: BorderStyle.solid)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Image.network(
-                          "${dataNews[index].image_url}",
-                          width: sizeDevice.width,
-                        ),
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: dataNews.length,
+      itemBuilder: (context, index) {
+        return Column(
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, ReadingNews.readingRoute,
+                    arguments: dataNews[index]);
+              },
+              child: Container(
+                margin: EdgeInsets.only(left: 10, right: 10),
+                height: sizeDevice.height / 2,
+                width: sizeDevice.width,
+                decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(18)),
+                    border: Border.all(style: BorderStyle.solid)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Image.network(
+                        "${dataNews[index].image_url}",
+                        width: sizeDevice.width,
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Text(
-                              "${dataNews[index].description}",
-                              textAlign: TextAlign.left,
-                              maxLines: 5,
-                              overflow: TextOverflow.fade,
-                              style: TextStyle(
-                                  fontSize: 18, fontFamily: 'TitleNewsRoslab'),
-                            ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Text(
+                            "${dataNews[index].description}",
+                            textAlign: TextAlign.left,
+                            maxLines: 5,
+                            overflow: TextOverflow.fade,
+                            style: TextStyle(
+                                fontSize: 18, fontFamily: 'TitleNewsRoslab'),
                           ),
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              SizedBox(
-                height: 30,
-              )
-            ],
-          );
-        },
-      ),
+            ),
+            SizedBox(
+              height: 30,
+            )
+          ],
+        );
+      },
     );
   }
 
@@ -236,69 +234,67 @@ class LoadingData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
-                height: 360,
-                width: sizeDevice.width,
-                decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.only(bottomLeft: Radius.circular(18)),
-                    border: Border.all(style: BorderStyle.solid)),
-                child: Shimmer.fromColors(
-                  baseColor: Colors.grey.shade500,
-                  highlightColor: Colors.grey.shade400,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.all(10),
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: 3,
+      itemBuilder: (context, index) {
+        return Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: 10, right: 10),
+              height: 360,
+              width: sizeDevice.width,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.only(bottomLeft: Radius.circular(18)),
+                  border: Border.all(style: BorderStyle.solid)),
+              child: Shimmer.fromColors(
+                baseColor: Colors.grey.shade500,
+                highlightColor: Colors.grey.shade400,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Container(
+                          height: 280,
+                          width: sizeDevice.width,
+                          decoration: BoxDecoration(color: Colors.grey),
+                        )),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
                           child: Container(
-                            height: 280,
-                            width: sizeDevice.width,
+                            height: 10,
                             decoration: BoxDecoration(color: Colors.grey),
-                          )),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Container(
-                              height: 10,
-                              decoration: BoxDecoration(color: Colors.grey),
-                            ),
                           ),
                         ),
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: SizedBox(
-                            width: 250,
-                            child: Container(
-                              height: 10,
-                              decoration: BoxDecoration(color: Colors.grey),
-                            ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SizedBox(
+                          width: 250,
+                          child: Container(
+                            height: 10,
+                            decoration: BoxDecoration(color: Colors.grey),
                           ),
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              SizedBox(
-                height: 30,
-              )
-            ],
-          );
-        },
-      ),
+            ),
+            SizedBox(
+              height: 30,
+            )
+          ],
+        );
+      },
     );
   }
 }

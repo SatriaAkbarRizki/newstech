@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:newstech/model/news.dart';
+import 'package:newstech/view/reading.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,70 +15,90 @@ class ReadingNewsLandScape extends StatelessWidget {
 
     final sizeDevice = MediaQuery.of(context).size;
     return Scaffold(
-      body: Stack(
-        children: [
-          ListView(
-            children: [
-              Stack(
-                children: [
-                  Animate(
-                    effects: [FadeEffect(duration: 800.ms, delay: 500.ms)],
-                    child: Container(
-                      width: sizeDevice.width,
-                      height: 350,
-                      decoration: BoxDecoration(color: Colors.black),
-                      child: Image.network(
-                        '${args.image_url}',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Container(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth <= 400) {
+            return ReadingPotrait(sizeDevice: sizeDevice, args: args);
+          } else {
+            return ReadingLandScape(sizeDevice: sizeDevice, args: args);
+          }
+        },
+      ),
+    );
+  }
+}
+
+class ReadingLandScape extends StatelessWidget {
+  final Size sizeDevice;
+  final NewsModel args;
+
+  ReadingLandScape({required this.sizeDevice, required this.args});
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        ListView(
+          children: [
+            Stack(
+              children: [
+                Animate(
+                  effects: [FadeEffect(duration: 800.ms, delay: 500.ms)],
+                  child: Container(
+                    width: sizeDevice.width,
                     height: 350,
-                    padding: const EdgeInsets.all(5.0),
-                    alignment: Alignment.bottomCenter,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: <Color>[
-                          Colors.black.withAlpha(0),
-                          Colors.black12,
-                          Colors.black
-                        ],
-                      ),
+                    decoration: BoxDecoration(color: Colors.black),
+                    child: Image.network(
+                      '${args.image_url}',
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  Animate(
-                    effects: [FadeEffect(duration: 500.ms, delay: 200.ms)],
-                    child: Positioned(
-                        left: 10,
-                        top: 245,
-                        child: SizedBox(
-                          width: sizeDevice.width,
-                          child: Padding(
-                            padding: const EdgeInsets.all(5),
-                            child: Text(
-                              '${args.title}',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'TitleNewsRoslab',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 18,
-                              ),
+                ),
+                Container(
+                  height: 350,
+                  padding: const EdgeInsets.all(5.0),
+                  alignment: Alignment.bottomCenter,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: <Color>[
+                        Colors.black.withAlpha(0),
+                        Colors.black12,
+                        Colors.black
+                      ],
+                    ),
+                  ),
+                ),
+                Animate(
+                  effects: [FadeEffect(duration: 500.ms, delay: 200.ms)],
+                  child: Positioned(
+                      left: 10,
+                      top: 245,
+                      child: SizedBox(
+                        width: sizeDevice.width,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Text(
+                            '${args.title}',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'TitleNewsRoslab',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 18,
                             ),
                           ),
-                        )),
-                  ),
-                  Positioned(
-                      top: 20,
-                      child: ActionBar(sizeDevice: sizeDevice, url: args.link))
-                ],
-              ),
-              Positioned(
-                top: 330,
-                    child: Container(
+                        ),
+                      )),
+                ),
+                Positioned(
+                    top: 20,
+                    child: ActionBar(sizeDevice: sizeDevice, url: args.link))
+              ],
+            ),
+            Stack(
+              children: [
+                Container(
                   height: 300,
                   width: sizeDevice.width,
                   decoration: BoxDecoration(
@@ -111,12 +132,12 @@ class ReadingNewsLandScape extends StatelessWidget {
                       )
                     ],
                   ),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
+                )
+              ],
+            ),
+          ],
+        )
+      ],
     );
   }
 }

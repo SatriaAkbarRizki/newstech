@@ -14,118 +14,129 @@ class ReadingNews extends StatelessWidget {
     final args = ModalRoute.of(context)!.settings.arguments as NewsModel;
     final sizeDevice = MediaQuery.of(context).size;
     return Scaffold(
-      body: LayoutBuilder(builder: (context, constraints) {
-        if (constraints.maxWidth >= 400){
-          return ReadingNewsLandScape(listNews: listNews);
-        }else{
-          return Reading(sizeDevice, args);
-        }
-      },),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          ;
+          if (constraints.maxWidth >= 400) {
+            print('Size Device: ${constraints.maxWidth}');
+            return ReadingNewsLandScape(listNews: listNews);
+          } else {
+            print('Size Device: ${constraints.maxWidth}');
+            return ReadingPotrait(
+              sizeDevice: sizeDevice,
+              args: args,
+            );
+          }
+        },
+      ),
     );
   }
+}
 
-  Widget Reading(Size sizeDevice, NewsModel args) {
+class ReadingPotrait extends StatelessWidget {
+  final Size sizeDevice;
+  final NewsModel args;
+  ReadingPotrait({required this.sizeDevice, required this.args});
+  @override
+  Widget build(BuildContext context) {
     return Stack(
-        children: [
-          Column(
-            children: <Widget>[
-              Stack(
-                children: [
-                  Animate(
-                    effects: [FadeEffect(duration: 800.ms, delay: 500.ms)],
-                    child: Container(
-                      width: sizeDevice.width,
-                      height: 350,
-                      decoration: BoxDecoration(color: Colors.black),
-                      child: Image.network(
-                        '${args.image_url}',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Container(
+      children: [
+        Column(
+          children: <Widget>[
+            Stack(
+              children: [
+                Animate(
+                  effects: [FadeEffect(duration: 800.ms, delay: 500.ms)],
+                  child: Container(
+                    width: sizeDevice.width,
                     height: 350,
-                    padding: const EdgeInsets.all(5.0),
-                    alignment: Alignment.bottomCenter,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: <Color>[
-                          Colors.black.withAlpha(0),
-                          Colors.black12,
-                          Colors.black
-                        ],
-                      ),
+                    decoration: BoxDecoration(color: Colors.black),
+                    child: Image.network(
+                      '${args.image_url}',
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  Animate(
-                    effects: [FadeEffect(duration: 500.ms, delay: 200.ms)],
-                    child: Positioned(
-                        left: 10,
-                        top: 245,
-                        child: SizedBox(
-                          width: sizeDevice.width,
-                          child: Padding(
-                            padding: const EdgeInsets.all(5),
-                            child: Text(
-                              '${args.title}',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'TitleNewsRoslab',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 18,
-                              ),
+                ),
+                Container(
+                  height: 350,
+                  padding: const EdgeInsets.all(5.0),
+                  alignment: Alignment.bottomCenter,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: <Color>[
+                        Colors.black.withAlpha(0),
+                        Colors.black12,
+                        Colors.black
+                      ],
+                    ),
+                  ),
+                ),
+                Animate(
+                  effects: [FadeEffect(duration: 500.ms, delay: 200.ms)],
+                  child: Positioned(
+                      left: 10,
+                      top: 245,
+                      child: SizedBox(
+                        width: sizeDevice.width,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Text(
+                            '${args.title}',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'TitleNewsRoslab',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 18,
                             ),
                           ),
-                        )),
-                  )
-                ],
-              )
-            ],
-          ),
-          Positioned(
-            top: 330,
-            child: Container(
-              height: sizeDevice.height,
-              width: sizeDevice.width,
-              decoration: BoxDecoration(
-                  color: Color(0xffFEFDFF),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25))),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Animate(
-                    effects: [FadeEffect(duration: 800.ms, delay: 350.ms)],
-                    child: Container(
-                        padding: EdgeInsets.all(20),
-                        child: Text(
-                          '${args.description}',
-                          style: TextStyle(
-                              fontFamily: 'SourceSans',
-                              fontSize: 19,
-                              height: 2),
-                        )),
-                  )
-                ],
-              ),
+                        ),
+                      )),
+                )
+              ],
+            )
+          ],
+        ),
+        Positioned(
+          top: 330,
+          child: Container(
+            height: sizeDevice.height,
+            width: sizeDevice.width,
+            decoration: BoxDecoration(
+                color: Color(0xffFEFDFF),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25))),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Animate(
+                  effects: [FadeEffect(duration: 800.ms, delay: 350.ms)],
+                  child: Container(
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        '${args.description}',
+                        style: TextStyle(
+                            fontFamily: 'SourceSans', fontSize: 19, height: 2),
+                      )),
+                )
+              ],
             ),
           ),
-          Positioned(
-              top: 30,
-              child: ActionBar(sizeDevice: sizeDevice, url: args.link)),
-          Positioned(top: 690, child: ShadowMessage()),
-          Positioned(
-              top: 650,
-              left: sizeDevice.width / 2,
-              child: ButtonSourceNews(
-                url: args.link.toString(),
-              ))
-        ],
-      );
+        ),
+        Positioned(
+            top: 30, child: ActionBar(sizeDevice: sizeDevice, url: args.link)),
+        Positioned(top: 690, child: ShadowMessage()),
+        Positioned(
+            top: 600,
+            left: sizeDevice.width * 0.45,
+            child: ButtonSourceNews(
+              url: args.link.toString(),
+            ))
+      ],
+    );
   }
 }
 
@@ -182,7 +193,7 @@ class ShadowMessage extends StatelessWidget {
     return Container(
       height: 350,
       width: sizeDevice.width,
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(10),
       alignment: Alignment.bottomCenter,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
